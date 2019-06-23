@@ -48,6 +48,8 @@ public class Settings {
    */
   private void loadData() throws IOException {
     String projectPath = System.getProperty("user.dir");
+
+    System.out.println(projectPath);
     String propertyFilePath = projectPath + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + System.getProperty("appConfig") + ".properties";
     prop = new Properties();
     prop.load(new FileInputStream(propertyFilePath));
@@ -66,7 +68,7 @@ public class Settings {
   deviceName = prop.getProperty("deviceName", "Unknown Device");
   appPath = prop.getProperty("appFileName");
     if (appPath != null) {
-      appPath = projectPath + File.separator + "triviaapp" + File.separator + appPath;
+      appPath = projectPath + File.separator + "testapk" + File.separator + appPath;
     }
   avdName = prop.getProperty("avdName");
   shouldRestart = Boolean.parseBoolean(prop.getProperty("restart", "true"));

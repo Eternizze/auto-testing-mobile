@@ -24,15 +24,17 @@ public class MobileTest {
   private static AppiumDriverLocalService service;
   protected static AppiumDriver driver;
 
-  @BeforeTest
+  @BeforeMethod
   public static void beforeAll() throws IOException {
     //Get Settings
     settings = Settings.getInstance();
+
 
     //Start Appium Server
     AppiumServiceBuilder serviceBuilder = new AppiumServiceBuilder().usingAnyFreePort()
         .withArgument(GeneralServerFlag.RELAXED_SECURITY)
         .withArgument(GeneralServerFlag.LOG_LEVEL, "warn");
+    System.out.println("vbhjnkml,");
 
     service = AppiumDriverLocalService.buildService(serviceBuilder);
     service.start();
@@ -42,12 +44,12 @@ public class MobileTest {
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
-  @BeforeMethod
-  public void  beforeEach(){
-    if (settings.shouldRestartBetweenTests()){
-      driver.resetApp();
-    }
-  }
+//  @BeforeMethod
+//  public void  beforeEach(){
+//    if (settings.shouldRestartBetweenTests()){
+//      driver.resetApp();
+//    }
+//  }
 
   @AfterTest
   public static void afterAll(){

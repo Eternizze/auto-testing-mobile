@@ -1,4 +1,4 @@
 package triviaapp.pages;
 
-public class LoginTelPage {
+public class SettingsPage {
 }
