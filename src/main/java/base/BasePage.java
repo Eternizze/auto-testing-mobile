@@ -19,11 +19,16 @@ public class BasePage {
     this.driver = driver;
     PageFactory.initElements(new AppiumFieldDecorator(driver), this);
   }
+
 //napishi wait-a po-smislenoo, i da e otdelen metod, kakto da ima proverka za nalichie na elementa
-  public boolean isElVisible(MobileElement element) {
-//    element = (MobileElement) driver.findElement(By.xpath(xpath));
+  public void isElVisible(MobileElement element) {
     WebDriverWait wait = new WebDriverWait(driver, 1);
     wait.until(ExpectedConditions.visibilityOf(element));
+//    return element.isDisplayed();
+  }
+
+  public boolean isTextVisible(String text) {
+    WebElement element = driver.findElement(By.xpath("//*[contains(text(), '" + text + "')]"));
     return element.isDisplayed();
   }
 

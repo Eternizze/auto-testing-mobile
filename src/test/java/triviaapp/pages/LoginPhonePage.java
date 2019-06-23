@@ -4,6 +4,8 @@ import base.BasePage;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.testng.Assert;
+import triviaapp.data.ErrorTexts;
 
 public class LoginPhonePage extends BasePage {
 
@@ -31,8 +33,29 @@ public class LoginPhonePage extends BasePage {
   }
 
   public void loginPhone(String phoneNumber) {
+    populatePhone(phoneNumber);
+    clickNextButton();
+  }
+
+  public void populatePhone(String phoneNumber){
     driver.getKeyboard();
     phoneInput.sendKeys(phoneNumber);
+  }
+
+  public LoginOtpPage clickNextButton(){
     phoneNextButton.click();
+    return new LoginOtpPage(driver);
+  }
+
+  public String getErrorText() {
+    return errorPhoneIncorrect.getText();
+  }
+
+  public String getLoginHeader(){
+    return loginPhoneHeader.getText();
+  }
+
+  public void verifyPhoneError() {
+    Assert.assertEquals(getErrorText(), ErrorTexts.ERROR_PHONE, "Error text is wrong");
   }
 }

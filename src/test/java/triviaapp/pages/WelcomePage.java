@@ -23,7 +23,7 @@ public class WelcomePage extends BasePage {
     super(driver);
   }
 
-  public LoginPhonePage OpenLoginTel() {
+  public LoginPhonePage OpenLoginPhone() {
     isElVisible(loginTelScreenButton);
     loginTelScreenButton.click();
     return new LoginPhonePage(driver);

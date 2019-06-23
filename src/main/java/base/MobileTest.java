@@ -24,7 +24,7 @@ public class MobileTest {
   private static AppiumDriverLocalService service;
   protected static AppiumDriver driver;
 
-  @BeforeMethod
+  @BeforeTest
   public static void beforeAll() throws IOException {
     //Get Settings
     settings = Settings.getInstance();
@@ -44,12 +44,12 @@ public class MobileTest {
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
-//  @BeforeMethod
-//  public void  beforeEach(){
-//    if (settings.shouldRestartBetweenTests()){
-//      driver.resetApp();
-//    }
-//  }
+  @BeforeMethod
+  public void  beforeEach(){
+    if (settings.shouldRestartBetweenTests()){
+      driver.resetApp();
+    }
+  }
 
   @AfterTest
   public static void afterAll(){
