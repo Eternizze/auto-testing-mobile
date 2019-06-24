@@ -31,7 +31,6 @@ public class MobileTest {
     //Get Settings
     settings = Settings.getInstance();
 
-
     //Start Appium Server
     AppiumServiceBuilder serviceBuilder = new AppiumServiceBuilder()
         .usingAnyFreePort()

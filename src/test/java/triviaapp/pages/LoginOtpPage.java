@@ -6,9 +6,8 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import logger.Log;
 import org.testng.Assert;
-import org.testng.Reporter;
 import triviaapp.data.ErrorTexts;
-import triviaapp.data.LoginTestsData;
+import triviaapp.data.TestsData;
 
 public class LoginOtpPage extends BasePage {
 
@@ -68,7 +67,7 @@ public class LoginOtpPage extends BasePage {
   }
 
   public void verifyOtpHeader() {
-    Assert.assertEquals(getOtpHeader(), LoginTestsData.OTP_HEADER);
+    Assert.assertEquals(getOtpHeader(), TestsData.OTP_HEADER);
   }
 
   public void waitVisibleALert(){
@@ -91,5 +90,11 @@ public class LoginOtpPage extends BasePage {
     Log.info("OK button on the alert is tapped");
   }
 
+  public void login(){
+    String code = getOtpCode();
+    clickOkAlertButton();
+    populateOtp(code);
+    clickNextButton();
+  }
 
 }

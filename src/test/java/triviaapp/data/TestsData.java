@@ -2,7 +2,7 @@ package triviaapp.data;
 
 import java.security.PublicKey;
 
-public class LoginTestsData {
+public class TestsData {
 
 
   public final static String LOGIN_PHONE_HEADER = "You dare challenge me? \nBring it on!";
@@ -14,6 +14,8 @@ public class LoginTestsData {
   public final static String REGISTER_NICKNAME = "McDj";
   public final static String CREATE_PROFILE_HEADER = "Create Your Profile";
   public final static String OTP_HEADER  = "Enter the 4 digit code I have sent to you";
+
+  public final static String EMAIL = "t@t.com";
 
 
 

@@ -6,7 +6,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import logger.Log;
 import org.testng.Assert;
-import triviaapp.data.LoginTestsData;
+import triviaapp.data.TestsData;
 
 public class HomePage extends BasePage {
 
@@ -43,7 +43,7 @@ public class HomePage extends BasePage {
   public void verifyUserIsLoggedIn() {
     Assert.assertTrue(profileSection.isDisplayed(), "Profile section is not present");
     logAssert(profileSection, "Profile section is displayed", "Profile section is missing");
-    Assert.assertEquals(getNickname(), LoginTestsData.NICKNAME);
+    Assert.assertEquals(getNickname(), TestsData.NICKNAME);
     Log.info(String.format("User is logged with nickname %s", getNickname()));
   }
   public void verifyUserIsRegistered(String nickname) {
@@ -60,6 +60,11 @@ public class HomePage extends BasePage {
   }
   public String getGoldAmaount(){
     return goldAmount.getText();
+  }
+
+  public MyProfilePage openMyProfile(){
+    profileSection.click();
+    return new MyProfilePage(driver);
   }
 
 

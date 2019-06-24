@@ -4,6 +4,8 @@ import base.BasePage;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.testng.Assert;
+import triviaapp.data.Texts;
 
 public class DifficultyPage extends BasePage {
 
@@ -48,6 +50,13 @@ public class DifficultyPage extends BasePage {
 
   public DifficultyPage (AppiumDriver driver) {
     super(driver);
+  }
+
+  public String getDifficultyHeaderText(){
+    return difficultyHeader.getText();
+  }
+  public void verifyDifficultyHeader(){
+    Assert.assertEquals(getDifficultyHeaderText(), Texts.DIFFICULTY_HEADER);
   }
 
 }

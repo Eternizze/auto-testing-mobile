@@ -3,12 +3,10 @@ package triviaapp.pages;
 import base.BasePage;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import logger.Log;
 import org.testng.Assert;
-import triviaapp.data.LoginTestsData;
+import triviaapp.data.TestsData;
 
 public class CreateProfilePage extends BasePage {
 
@@ -66,7 +64,7 @@ public class CreateProfilePage extends BasePage {
 
 
   public void verifyCreateProfileHeader(){
-    Assert.assertEquals(getCreateProfileHeader(), LoginTestsData.CREATE_PROFILE_HEADER);
+    Assert.assertEquals(getCreateProfileHeader(), TestsData.CREATE_PROFILE_HEADER);
   }
 
   public void populateNickname(String nickname){

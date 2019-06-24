@@ -1,7 +1,8 @@
 package triviaapp.tests;
 
 import base.MobileTest;
-import org.openqa.selenium.ScreenOrientation;
+import logger.Log;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import triviaapp.pages.WelcomePage;
 
@@ -10,15 +11,19 @@ import triviaapp.pages.WelcomePage;
  */
 public class SystemTests extends MobileTest {
 
-  private WelcomePage welcome = new WelcomePage(driver);
+  private String bundleId = "my.bigwin.com";
+//  private WelcomePage welcome = new WelcomePage(driver);
 
   @Test
-  public void rotateHomeScreen() {
-    driver.rotate(ScreenOrientation.PORTRAIT);
+  public void verifyAppIsInstalled(){
+    Assert.assertTrue(driver.isAppInstalled(bundleId), "The App is not installed");
+    Log.info("App is installed");
   }
 
   @Test
-  public void runInBackground(){
-
+  public void unistallApp(){
+    driver.removeApp(bundleId);
+    Assert.assertFalse(driver.isAppInstalled(bundleId),"The app is not uninstalled");
+    Log.info("App is not installed");
   }
 }
