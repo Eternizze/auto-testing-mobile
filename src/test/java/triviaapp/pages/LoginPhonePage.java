@@ -4,8 +4,11 @@ import base.BasePage;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import logger.Log;
 import org.testng.Assert;
 import triviaapp.data.ErrorTexts;
+
+import java.io.IOException;
 
 public class LoginPhonePage extends BasePage {
 
@@ -35,11 +38,13 @@ public class LoginPhonePage extends BasePage {
   public void loginPhone(String phoneNumber) {
     populatePhone(phoneNumber);
     clickNextButton();
+    Log.info("NextButton is clicked");
   }
 
   public void populatePhone(String phoneNumber){
     driver.getKeyboard();
     phoneInput.sendKeys(phoneNumber);
+    Log.info(String.format("Type phone %s in input form.", phoneNumber));
   }
 
   public LoginOtpPage clickNextButton(){
@@ -58,4 +63,5 @@ public class LoginPhonePage extends BasePage {
   public void verifyPhoneError() {
     Assert.assertEquals(getErrorText(), ErrorTexts.ERROR_PHONE, "Error text is wrong");
   }
+
 }

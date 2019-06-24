@@ -21,7 +21,7 @@ public class ConfirmOtpPage extends BasePage {
   }
 
   public void verifyConfirmText(){
-    isElVisible(confirmText);
+    waitElemVisibility(confirmText);
     Assert.assertEquals(getConfirmtext(), Texts.CONFIRM_TEXT);
   }
 

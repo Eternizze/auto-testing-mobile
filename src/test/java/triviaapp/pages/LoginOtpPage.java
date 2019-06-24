@@ -4,8 +4,10 @@ import base.BasePage;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import org.openqa.selenium.By;
+import logger.Log;
 import org.testng.Assert;
+import org.testng.Reporter;
+import triviaapp.data.ErrorTexts;
 import triviaapp.data.LoginTestsData;
 
 public class LoginOtpPage extends BasePage {
@@ -48,12 +50,19 @@ public class LoginOtpPage extends BasePage {
   public void populateOtp(String code){
     otpInput.click();
     otpInput.sendKeys(code);
+    Log.info(String.format("OTP typed %s in input form.", code));
   }
 
   public ConfirmOtpPage clickNextButton(){
     otpNextButton.click();
+    Log.info("Next Button is cklicked");
     return new ConfirmOtpPage(driver);
   }
+
+  public  void  verifyError(){
+    Assert.assertEquals(getErrorText(), ErrorTexts.ERROR_OTP);
+  }
+
   public String getErrorText() {
     return otpError.getText();
   }
@@ -63,11 +72,12 @@ public class LoginOtpPage extends BasePage {
   }
 
   public void waitVisibleALert(){
-
+   waitElemVisibility(otpCodeAlert);
   }
 
   public void verifyOtpAlert(){
-    Assert.assertTrue(otpCodeAlert.isDisplayed(), "OTP alert is not displayed");
+    Assert.assertTrue(otpCodeAlert.isDisplayed());
+    logAssert(otpCodeAlert, "Alert is dispalyed", "OTP alert is not displayed");
   }
 
   public String getOtpHeader(){
@@ -78,6 +88,7 @@ public class LoginOtpPage extends BasePage {
   }
   public void clickOkAlertButton(){
     otpAlertButton.click();
+    Log.info("OK button on the alert is tapped");
   }
 
 

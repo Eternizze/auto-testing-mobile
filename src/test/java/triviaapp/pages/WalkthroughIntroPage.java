@@ -4,6 +4,9 @@ import base.BasePage;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import logger.Log;
+import org.testng.Assert;
+import triviaapp.data.Texts;
 
 public class WalkthroughIntroPage extends BasePage {
 
@@ -18,5 +21,23 @@ public class WalkthroughIntroPage extends BasePage {
 
   public WalkthroughIntroPage (AppiumDriver driver) {
     super(driver);
+  }
+
+  public String getDragonText (){
+    return dragonText.getText();
+  }
+
+  public void waitVisibleIntro(){
+    waitElemVisibility(dragonText);
+    Log.info("Intro screen is loaded");
+  }
+
+  public void clickSkipButton(){
+    okButton.click();
+    Log.info("Skip button is clicked");
+  }
+
+  public void verifyDragonText(){
+    Assert.assertEquals(getDragonText(), Texts.INTRO_WALKTHROUGH);
   }
 }

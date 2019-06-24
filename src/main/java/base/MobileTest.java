@@ -1,6 +1,8 @@
 package base;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
@@ -31,10 +33,10 @@ public class MobileTest {
 
 
     //Start Appium Server
-    AppiumServiceBuilder serviceBuilder = new AppiumServiceBuilder().usingAnyFreePort()
+    AppiumServiceBuilder serviceBuilder = new AppiumServiceBuilder()
+        .usingAnyFreePort()
         .withArgument(GeneralServerFlag.RELAXED_SECURITY)
         .withArgument(GeneralServerFlag.LOG_LEVEL, "warn");
-    System.out.println("vbhjnkml,");
 
     service = AppiumDriverLocalService.buildService(serviceBuilder);
     service.start();
@@ -70,6 +72,11 @@ public class MobileTest {
     capabilities.setCapability(MobileCapabilityType.APP, settings.getAppPath());
 
     // Set command timeout(in debug timeout is huge to allow normal debugging
+    if (settings.isDebug()) {
+      capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 3600);
+    } else {
+      capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 120);
+    }
 
     //Set Android specific settings
     if (settings.getPlatform() == Platform.ANDROID){

@@ -8,6 +8,8 @@ public class Texts {
 
   public final static String CONFIRM_TEXT  = "Confirmed!";
 
+  public final static String INTRO_WALKTHROUGH = "";
+
 
 
 
