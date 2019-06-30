@@ -14,13 +14,13 @@ public class SystemTests extends MobileTest {
   private String bundleId = "my.bigwin.com";
 //  private WelcomePage welcome = new WelcomePage(driver);
 
-  @Test
+  @Test(priority = 2)
   public void verifyAppIsInstalled(){
     Assert.assertTrue(driver.isAppInstalled(bundleId), "The App is not installed");
     Log.info("App is installed");
   }
 
-  @Test
+  @Test(priority = 2)
   public void unistallApp(){
     driver.removeApp(bundleId);
     Assert.assertFalse(driver.isAppInstalled(bundleId),"The app is not uninstalled");

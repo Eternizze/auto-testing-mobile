@@ -12,6 +12,7 @@ import java.io.IOException;
 
 public class LoginTests extends MobileTest {
 
+  private WelcomePage welcomePage;
   private LoginPhonePage loginPhonePage;
   private LoginOtpPage loginOtpPage;
   private ConfirmOtpPage confirmOtpPage;
@@ -19,8 +20,7 @@ public class LoginTests extends MobileTest {
 
   @BeforeMethod
   public void beforeLoginTest() {
-    WelcomePage welcome = new WelcomePage(driver);
-    welcome.openLoginPhone();
+    welcomePage = new WelcomePage(driver);
     loginPhonePage = new LoginPhonePage(driver);
     loginOtpPage = new LoginOtpPage(driver);
     confirmOtpPage = new ConfirmOtpPage(driver);
@@ -29,6 +29,7 @@ public class LoginTests extends MobileTest {
 
   @Test
   public void verifyLoginPhonePage() throws IOException {
+    welcomePage.openLoginPhone();
     Log.info("verifyLoginPhonePage test starts");
     Assert.assertEquals(loginPhonePage.getLoginHeader(), TestsData.LOGIN_PHONE_HEADER);
     loginPhonePage.screenshot("LoginTests", "verifyLoginPhonePage");
@@ -56,7 +57,8 @@ public class LoginTests extends MobileTest {
   @Test
   public void login() throws IOException {
     Log.info("login test starts");
-    loginPhonePage.loginPhone(TestsData.LOGIN_PHONE);
+    loginPhonePage.populatePhone(TestsData.LOGIN_PHONE);
+    loginPhonePage.clickNextButton();
     loginOtpPage.verifyOtpAlert();
     String code = loginOtpPage.getOtpCode();
     loginOtpPage.clickOkAlertButton();

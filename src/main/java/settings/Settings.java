@@ -12,6 +12,7 @@ import java.util.Properties;
  * Settings class reads global configurations and use them during test execution.
  */
 public class Settings {
+
   private static Settings instance;
   private static final  Object lock = new Object();
 
@@ -22,7 +23,7 @@ public class Settings {
   private static String deviceName;
   private static String appPath;
   private static String avdName;
-  private static boolean shouldRestart;
+  private static String udid;
 
   /**
    * Create a Singleton instance of settings (we need only one instance).
@@ -47,7 +48,8 @@ public class Settings {
    */
   private void loadData() throws IOException {
     String projectPath = System.getProperty("user.dir");
-    String propertyFilePath = projectPath + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + System.getProperty("appConfig") + ".properties";
+    String propertyFilePath = projectPath + File.separator + "src" + File.separator + "test" +
+        File.separator + "resources" + File.separator + System.getProperty("appConfig") + ".properties";
     prop = new Properties();
     prop.load(new FileInputStream(propertyFilePath));
 
@@ -68,7 +70,6 @@ public class Settings {
       appPath = projectPath + File.separator + "testapk" + File.separator + appPath;
     }
   avdName = prop.getProperty("avdName");
-  shouldRestart = Boolean.parseBoolean(prop.getProperty("restart", "true"));
 
   }
 
@@ -95,7 +96,7 @@ public class Settings {
    *
    * @return String.
    */
-  public static String getDeviceName(){
+  public String getDeviceName(){
     return deviceName;
   }
 
@@ -104,7 +105,7 @@ public class Settings {
    *
    * @return avd name.
    */
-  public static String getAvdName() {
+  public String getAvdName() {
     return avdName;
   }
 
@@ -123,7 +124,7 @@ public class Settings {
    * @return boolean value.
    */
   public boolean shouldRestartBetweenTests(){
-    return shouldRestart;
+    return Boolean.parseBoolean(prop.getProperty("restart", "true"));
   }
 
   /**
@@ -134,4 +135,40 @@ public class Settings {
   public boolean isDebug(){
     return ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("jdwp");
   }
+
+  public String getAppPackage() {
+    return prop.getProperty("appPackage");
+  }
+
+  public String getAppActivity() {
+    return prop.getProperty("appActivity");
+  }
+
+  /**
+   * Get version of ChromeDriver.
+   *
+   * @return version as string (null if not specified).
+   */
+  public String getChromeDriverVersion() {
+    return prop.getProperty("chromeDriverVersion");
+  }
+
+  /**
+   * Get browser type.
+   *
+   * @return version as string (null if not specified).
+   */
+  public String getBrowserType() {
+    return prop.getProperty("browser");
+  }
+
+  /**
+   * Get unique device identifier of real device.
+   *
+   * @return udid.
+   */
+  public String getUdid() {
+    return udid;
+  }
+
 }

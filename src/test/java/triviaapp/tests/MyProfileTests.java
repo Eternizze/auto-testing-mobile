@@ -23,22 +23,29 @@ public class MyProfileTests extends MobileTest {
 
   @BeforeMethod
   public void beforeLoginTest() {
-    WelcomePage welcome = new WelcomePage(driver);
-    welcome.openLoginPhone();
-    loginPhonePage = new LoginPhonePage(driver);
-    loginPhonePage.loginPhone(TestsData.LOGIN_PHONE);
-    loginOtpPage = new LoginOtpPage(driver);
-    loginOtpPage.login();
-    confirmOtpPage = new ConfirmOtpPage(driver);
+//    WelcomePage welcome = new WelcomePage(driver);
+//    welcome.openLoginPhone();
+//    loginPhonePage = new LoginPhonePage(driver);
+//    loginPhonePage.loginPhone(TestsData.LOGIN_PHONE);
+//    loginOtpPage = new LoginOtpPage(driver);
+//    loginOtpPage.login();
+//    confirmOtpPage = new ConfirmOtpPage(driver);
     homePage = new HomePage(driver);
-    homePage.openMyProfile();
+
     myProfilePage = new MyProfilePage(driver);
     emailPage = new EmailPage(driver);
     settingsPage = new SettingsPage(driver);
     difficultyPage = new DifficultyPage(driver);
   }
 
-  @Test
+  @Test(priority = 0)
+  public void openMyProfilePage(){
+    homePage.openMyProfile();
+    myProfilePage.verifyMyProfileHeader();
+    Log.info("My Profile is opened");
+  }
+
+  @Test(priority = 1)
   public void openEmailPage() throws IOException {
     myProfilePage.openEmailPage();
     emailPage.verifyEmailHeader();
@@ -46,26 +53,26 @@ public class MyProfileTests extends MobileTest {
     emailPage.screenshot("MyProfile", "OpenEmail");
   }
 
-  @Test
+  @Test(priority = 1)
   public void changeEmail(){
-    myProfilePage.openEmailPage();
+//    myProfilePage.openEmailPage();
     emailPage.populateEmail();
     emailPage.clickConfirm();
     myProfilePage.verifyMyProfileHeader();
     Log.info("My profile is opened");
   }
 
-  @Test
+  @Test(priority = 1)
   public void openDifficultyPage() throws IOException {
     myProfilePage.openDifficultyPage();
     difficultyPage.verifyDifficultyHeader();
     Log.info("Difficulty Page is opened");
     emailPage.screenshot("MyProfile", "OpenDifficulty");
-
   }
 
-  @Test
+  @Test(priority = 1)
   public void openSettingsPage() throws IOException {
+    difficultyPage.clickBackButton();
     myProfilePage.openSettingsPage();
     settingsPage.verifySettingsHeader();
     Log.info("Settings Page is opened");

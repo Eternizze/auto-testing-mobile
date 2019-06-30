@@ -33,11 +33,11 @@ public class WalkthroughIntroPage extends BasePage {
   }
 
   public void clickSkipButton(){
-    okButton.click();
+    skipButton.click();
     Log.info("Skip button is clicked");
   }
 
   public void verifyDragonText(){
-    Assert.assertEquals(getDragonText(), Texts.INTRO_WALKTHROUGH);
+    Assert.assertEquals(getDragonText(), Texts.INTRO_WALKTHROUGH, "Does not match");
   }
 }

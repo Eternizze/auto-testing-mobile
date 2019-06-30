@@ -44,6 +44,7 @@ public class SignupTests extends MobileTest {
     createProfilePage.chooseAvatar();
     createProfilePage.clickContinueButton();
     walkthroughIntroPage.waitVisibleIntro();
+    walkthroughIntroPage.verifyDragonText();
     walkthroughIntroPage.clickSkipButton();
     homePage.verifyUserIsRegistered(TestsData.REGISTER_NICKNAME);
     homePage.screenshot("SignupTests","register");

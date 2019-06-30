@@ -3,6 +3,9 @@ package triviaapp.pages;
 import base.BasePage;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import logger.Log;
 import org.testng.Assert;
@@ -74,6 +77,7 @@ public class CreateProfilePage extends BasePage {
   }
 
   public void verifyUniqueNickname(){
+    ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.ENTER));
     Assert.assertTrue(nicknameCheck.isDisplayed());
     logAssert(nicknameCheck, "Nickname is unique", "Nickname is not unique");
   }

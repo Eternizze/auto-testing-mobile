@@ -3,12 +3,14 @@ package base;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -24,7 +26,7 @@ public class MobileTest {
 
   private static Settings settings;
   private static AppiumDriverLocalService service;
-  protected static AppiumDriver driver;
+  protected static AppiumDriver<?> driver;
 
   @BeforeTest
   public static void beforeAll() throws IOException {
@@ -41,7 +43,11 @@ public class MobileTest {
     service.start();
 
     //Start Appium Client and set implicity wait of 30sec.
-    driver = new AppiumDriver(service.getUrl(), getCapabilities());
+    if (settings.getPlatform() == Platform.IOS) {
+      driver = new IOSDriver(service.getUrl(), getCapabilities());
+    }else{
+      driver = new AndroidDriver(service.getUrl(), getCapabilities());
+    }
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
@@ -68,7 +74,17 @@ public class MobileTest {
     capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, settings.getPlatform());
     capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, settings.getPlatformVersion());
     capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, settings.getDeviceName());
-    capabilities.setCapability(MobileCapabilityType.APP, settings.getAppPath());
+
+    // Set application under test
+    if (settings.getAppPath() != null) {
+      capabilities.setCapability(MobileCapabilityType.APP, settings.getAppPath());
+    }
+    if (settings.getAppPackage() != null) {
+      capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, settings.getAppPackage());
+    }
+    if (settings.getAppActivity() != null) {
+      capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, settings.getAppActivity());
+    }
 
     // Set command timeout(in debug timeout is huge to allow normal debugging
     if (settings.isDebug()) {
@@ -91,6 +107,26 @@ public class MobileTest {
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.IOS_XCUI_TEST);
 
       }
+    }
+
+    // Set device id.
+    String udid = settings.getUdid();
+    if (udid != null) {
+      capabilities.setCapability(MobileCapabilityType.UDID, udid);
+    }
+
+    // Set web capabilities
+    String browser = settings.getBrowserType();
+    if (browser != null) {
+      capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, browser);
+    }
+
+    // Set WebView options
+    String chromeDriverVersion = settings.getChromeDriverVersion();
+    if (chromeDriverVersion != null) {
+      WebDriverManager.chromedriver().version(chromeDriverVersion).setup();
+      String path = WebDriverManager.chromedriver().version(chromeDriverVersion).getBinaryPath();
+      capabilities.setCapability(AndroidMobileCapabilityType.CHROMEDRIVER_EXECUTABLE, path);
     }
     return capabilities;
   }

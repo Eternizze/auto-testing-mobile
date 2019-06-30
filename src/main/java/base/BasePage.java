@@ -2,6 +2,7 @@ package base;
 
 import enums.SwipeDirection;
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
@@ -14,10 +15,21 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
+import utils.ImageUtils;
+import utils.ImageVerificationResult;
 
+import javax.annotation.Nullable;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 public class BasePage {
@@ -28,7 +40,31 @@ public class BasePage {
     PageFactory.initElements(new AppiumFieldDecorator(driver), this);
   }
 
-  public void swipe(SwipeDirection direction, int duration) {
+  @Nullable
+  private String getWebContext(AppiumDriver driver) {
+    ArrayList<String> contexts = new ArrayList(driver.getContextHandles());
+    for (String context : contexts) {
+      if (!context.equals("NATIVE_APP")) {
+        return context;
+      }
+    }
+    return null;
+  }
+
+  public void switchToWebContext() throws Exception {
+    String webContext = this.getWebContext(driver);
+    if (webContext != null) {
+      driver.context(webContext);
+    } else {
+      throw new Exception("Failed to switch to WebView context.");
+    }
+  }
+
+  public void switchToNativeContext() {
+    driver.context("NATIVE_APP");
+  }
+
+  public void swipe(SwipeDirection direction, int duration, int waitAfterSwipe) {
     Dimension size = driver.manage().window().getSize();
     int centerX = (int) (size.width * 0.5);
     int centerY = (int) (size.height * 0.5);
@@ -44,11 +80,11 @@ public class BasePage {
       startY = (int) (size.height * 0.3);
       endY = (int) (size.height * 0.7);
     } else if (direction == SwipeDirection.LEFT) {
-      startX = (int) (size.width * 0.7);
-      endX = (int) (size.width * 0.3);
+      startX = (int) (size.width * 0.9);
+      endX = (int) (size.width * 0.1);
     } else if (direction == SwipeDirection.RIGHT) {
-      startX = (int) (size.width * 0.3);
-      endX = (int) (size.width * 0.7);
+      startX = (int) (size.width * 0.9);
+      endX = (int) (size.width * 0.1);
     }
 
     TouchAction action = new TouchAction(driver)
@@ -57,18 +93,42 @@ public class BasePage {
         .moveTo(PointOption.point(endX, endY))
         .release();
     action.perform();
+
+    try {
+      Thread.sleep(waitAfterSwipe);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     Reporter.log(String.format("Swipe %s.", direction));
   }
 
-  public void swipe(SwipeDirection direction) {
-    this.swipe(direction, 1000);
+  public void swipe(SwipeDirection direction, int duration) {
+    this.swipe(direction, duration, 1000);
   }
 
+  public void swipe(SwipeDirection direction) {
+    this.swipe(direction, 1000, 1000);
+  }
 
-  public void waitElemVisibility(MobileElement element) {
-    WebDriverWait wait = new WebDriverWait(driver, 1);
-    wait.until(ExpectedConditions.visibilityOf(element));
-//    return element.isDisplayed();
+  public void match(String image, double tolerance, int timeout) throws Exception {
+    File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+    BufferedImage actualImage = ImageIO.read(screenshot);
+    BufferedImage expectedImage = actualImage;
+    ImageVerificationResult result = ImageUtils.compare(actualImage, expectedImage, 10, 0, 0);
+    if (result.diffPercent <= tolerance) {
+      Log.info(String.format("Current screen matches %s.", image));
+    } else {
+      Log.error(String.format("Current screen does not match %s.", image));
+    }
+  }
+
+  public void match(String image, double tolerance) throws Exception {
+    this.match(image, tolerance, 30);
+  }
+
+  public void match(String image) throws Exception {
+    this.match(image, 0.01);
   }
 
   public boolean isTextVisible(String text) {
@@ -76,16 +136,33 @@ public class BasePage {
     return element.isDisplayed();
   }
 
-   public void logAssert(MobileElement element, String successMsg, String failMsg) {
-     if (element.isDisplayed()) {
-       Log.info(successMsg);
-     } else {
-       Log.error(failMsg);
-     }
+  private String getReferenceImageB64(String image) throws IOException, URISyntaxException {
+    URL refImgUrl = getClass().getClassLoader().getResource(image);
+    File refImgFile = Paths.get(refImgUrl.toURI()).toFile();
+    return Base64.getEncoder().encodeToString(Files.readAllBytes(refImgFile.toPath()));
+  }
+
+  public WebElement findByImage(String image) throws IOException, URISyntaxException {
+    By locator = MobileBy.image(this.getReferenceImageB64(image));
+    return driver.findElement(locator);
+  }
+
+  public void waitElemVisibility(MobileElement element) {
+    WebDriverWait wait = new WebDriverWait(driver, 1);
+    wait.until(ExpectedConditions.visibilityOf(element));
+//    return element.isDisplayed();
+  }
+
+  public void logAssert(MobileElement element, String successMsg, String failMsg) {
+   if (element.isDisplayed()) {
+     Log.info(successMsg);
+   } else {
+     Log.error(failMsg);
    }
+  }
 
   public void screenshot(String folder, String name) throws IOException {
-    File srcFile = driver.getScreenshotAs(OutputType.FILE);
+    File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
     String fileName = name;
     File targetFile=new File("screenshots"+ File.separator + folder + File.separator + fileName +".png");
     FileUtils.copyFile(srcFile,targetFile);
