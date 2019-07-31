@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="D:/thesis/developing/auto-testing-mobile">
+        <classes>
+            <class name="triviaapp.tests.LoginTests">
+                <methods>
+                    <include name="verifyLoginPhonePage"/>
+<!--                    <include name="loginInvalidPhone"/>-->
+<!--                    <include name="loginInvalidOtp"/>-->
+                    <include name="login"/>
+                </methods>
+            </class>
+            <class name="triviaapp.tests.MyProfileTests">
+                <methods>
+                    <include name="openMyProfilePage"/>
+                    <include name="openEmailPage"/>
+                    <include name="changeEmail"/>
+                    <include name="openDifficultyPage"/>
+                    <include name="openSettingsPage"/>
+                </methods>
+            </class>
+<!--            <class name="triviaapp.tests.SignupTests">-->
+<!--                <methods>-->
+<!--                    <include name="register"/>-->
+<!--                </methods>-->
+<!--            </class>-->
+            <class name="triviaapp.tests.SystemTests">
+                <methods>
+                    <include name="verifyAppIsInstalled"/>
+                    <include name="unistallApp"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
